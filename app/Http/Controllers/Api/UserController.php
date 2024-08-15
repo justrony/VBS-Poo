@@ -21,16 +21,6 @@ class UserController extends Controller
             status: 200
         );
     }
-        //paginação de usuario (não terminado)
-    public function show(User $user) :  JsonResponse
-    {
-        $users = User::all();
-        return $this->Response(
-            message: 'Usuários encontrado com sucesso!',
-            data: $users,
-            status: 200
-        );
-    }
 
     public function store(UserRequest $request) : JsonResponse
     {
