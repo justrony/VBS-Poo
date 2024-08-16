@@ -3,14 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\VerificationController;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    public function __construct(
+        private VerificationController $verificationController
+    )
+    { }
+
     //Retorna usuarios recuperados
     public function index(): JsonResponse
     {
@@ -27,12 +34,14 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-
             $user = User::create([
                 'name' =>$request->name,
                 'email' => $request->email,
                 'password' => $request->password,
+                'verification_token' => Str::uuid()
             ]);
+
+            $this->verificationController->sendVerificationEmail($user);
 
             DB::commit();
 
@@ -43,7 +52,7 @@ class UserController extends Controller
             );
 
         }catch (Exception $e){
-
+            dd($e->getMessage());
             DB::rollBack();
 
             return $this->Response(

@@ -16,6 +16,13 @@ return [
 
     'default' => env('MAIL_MAILER', 'log'),
 
+    'mailgun' => [
+        'transport' => 'mailgun',
+        // 'client' => [
+        //     'timeout' => 5,
+        // ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Mailer Configurations

@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Validator;
+
 
 
 class AuthController extends Controller
 {
-
     /**
      * Get a JWT via given credentials.
      *
@@ -41,7 +40,6 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
-
     public function logout()
     {
         auth()->logout();
@@ -49,19 +47,4 @@ class AuthController extends Controller
         return response()->json(['message' => 'logged out']);
     }
 
-
-    public function refresh()
-    {
-        return $this->respondWithToken(auth()->refresh());
-    }
-
-
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
-    }
 }
