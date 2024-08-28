@@ -20,23 +20,27 @@ class BookController extends Controller
         $book = Book::create([
             'title' => $request->input('title'),
             'author' => $request->input('author'),
-            'pdf_path' => $pdfPath,
+            'path' => $pdfPath,
         ]);
         return response()->json(['message' => 'Livro criado com sucesso!', 'book' => $book], 201);
 
-        $perPage = $request->input('perPage', 10);
+    }
 
+    public function index(Request $request) : JsonResponse
+    {
+        $perPage = $request->input('perPage', 10);
         $books = Book::paginate($perPage);
         return response()->json($books);
     }
-    public function showPdf($id)
+
+    public function downloadPdf($id)
     {
         $book = Book::findOrFail($id);
 
-        if (!$book->pdf_path) {
+        if (!$book->path) {
             return response()->json(['message' => 'PDF não encontrado.'], 404);
         }
 
-        return response()->file(storage_path('app/public/' . $book->pdf_path));
+        return response()->file(storage_path('app/public/' . $book->path));
     }
 }

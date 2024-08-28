@@ -16,8 +16,8 @@ Route::delete('/users/{user}', [UserController::class, 'destroy']);
 Route::put('confirm/email/{id}/{token}', [VerificationController::class, 'verifyEmail'])->name('confirm.email');
 
 Route::post('/books', [BookController::class, 'store']);
-Route::get('/books/{id}/pdf', [BookController::class, 'showPdf']);
-
+Route::get('/books/{id}/pdf', [BookController::class, 'downloadPdf']);
+Route::get('/books', [BookController::class, 'index']);
 
 Route::group([
     'middleware' => 'api',
