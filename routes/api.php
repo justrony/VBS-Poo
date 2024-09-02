@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RecoverPasswordCodeController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
@@ -18,6 +19,7 @@ Route::put('confirm/email/{id}/{token}', [VerificationController::class, 'verify
 Route::post('/books', [BookController::class, 'store']);
 Route::get('/books/{id}/pdf', [BookController::class, 'downloadPdf']);
 Route::get('/books', [BookController::class, 'index']);
+Route::post('/books/{id}/comments', [BookController::class, 'addComment'])->middleware('api');
 
 Route::group([
     'middleware' => 'api',
@@ -28,3 +30,8 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth:api')->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->middleware('auth:api')->name('me');
 });
+
+Route::post("/forgot-password-code", [RecoverPasswordCodeController::class, "forgotPasswordCode"]);
+Route::post("/reset-password-validate-code", [RecoverPasswordCodeController::class, "resetPasswordValidateCode"]);
+Route::post("/reset-password-code", [RecoverPasswordCodeController::class, "resetPasswordCode"]);
+

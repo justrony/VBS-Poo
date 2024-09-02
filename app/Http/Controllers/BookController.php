@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\JsonResponse;
+
 class BookController extends Controller
 {
     public function store(Request $request) : JsonResponse
@@ -43,4 +45,22 @@ class BookController extends Controller
 
         return response()->file(storage_path('app/public/' . $book->path));
     }
+
+    public function addComment(Request $request, $bookId) : JsonResponse
+    {
+
+        $request->validate([
+            'comment' => 'required|string|max:1000', // MAXIMO 1000 CARACTERES
+        ]);
+
+        $book = Book::findOrFail($bookId);
+        $comment = new Comment();
+        $comment->user_id = auth()->user()->id;
+        $comment->book_id = $book->id;
+        $comment->comment = $request->comment;
+        $comment->save();
+
+        return response()->json(['message' => 'Comentário adicionado com sucesso!']);
+    }
+
 }
