@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -37,7 +38,7 @@ class UserController extends Controller
             $user = User::create([
                 'name' =>$request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => bcrypt($request->password),
                 'verification_token' => Str::uuid()
             ]);
 
@@ -52,9 +53,8 @@ class UserController extends Controller
             );
 
         }catch (Exception $e){
-            dd($e->getMessage());
             DB::rollBack();
-
+            Log::error('Erro ao cadastrar usuário: ' . $e->getMessage());
             return $this->Response(
                 message: 'Usuários não cadastrado!',
                 data: false,
@@ -73,7 +73,7 @@ class UserController extends Controller
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => $request->password ? bcrypt($request->password) : $user->password,
             ]);
 
             DB::commit();

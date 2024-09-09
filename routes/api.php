@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\RecoverPasswordCodeController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Middleware\checkSpecificUser;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,7 +18,10 @@ Route::put('/users/{user}', [UserController::class, 'update']);
 Route::delete('/users/{user}', [UserController::class, 'destroy']);
 Route::put('confirm/email/{id}/{token}', [VerificationController::class, 'verifyEmail'])->name('confirm.email');
 
-Route::post('/books', [BookController::class, 'store']);
+Route::put('/profile', [UserProfileController::class, 'updateProfile'])->middleware('api');
+Route::delete('/profile', [UserProfileController::class, 'destroyProfile'])->middleware('api');
+
+Route::post('/books', [BookController::class, 'store'])->middleware(CheckSpecificUser::class);
 Route::get('/books/{id}/pdf', [BookController::class, 'downloadPdf']);
 Route::get('/books', [BookController::class, 'index']);
 Route::post('/books/{id}/comments', [BookController::class, 'addComment'])->middleware('api');
