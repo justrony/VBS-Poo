@@ -35,7 +35,7 @@ class RecoverPasswordCodeController extends Controller
                 'message' => 'E-mail não encontrado!'
             ], 400);
         }
-//AQUI
+
         try {
             $userPasswordReset = DB::table('password_reset_tokens')->where([
                 ['email' => $request->email]
@@ -135,7 +135,7 @@ class RecoverPasswordCodeController extends Controller
 
     public function resetPasswordCode(ResetPasswordCodeRequest $request, ResetPasswordValidateCodeService $resetPasswordValidateCode): JsonResponse
     {
-        //AQUI
+
         try {
 
             $validationResult = $resetPasswordValidateCode->resetPasswordValidateCode($request->email, $request->code);
