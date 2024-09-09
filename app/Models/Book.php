@@ -10,7 +10,7 @@ class Book extends Model
 {
     use HasFactory;
     protected $table = 'books';
-    protected $fillable = ['title', 'author', 'path'];
+    protected $fillable = ['title', 'author', 'path', 'cover_image'];
 
     public function comments() : HasMany
     {

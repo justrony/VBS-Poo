@@ -16,16 +16,27 @@ class BookController extends Controller
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
             'pdf' => 'required|file|mimes:pdf|max:100000', // Máximo de 100MB
+            'cover_image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048', // Máximo de 2MB para imagem
         ]);
+
+        // Armazenar o PDF
         $pdfPath = $request->file('pdf')->store('pdfs', 'public');
 
+        // Armazenar a capa, se fornecida
+        $coverImagePath = null;
+        if ($request->hasFile('cover_image')) {
+            $coverImagePath = $request->file('cover_image')->store('covers', 'public');
+        }
+
+        // Criar o livro
         $book = Book::create([
             'title' => $request->input('title'),
             'author' => $request->input('author'),
             'path' => $pdfPath,
+            'cover_image' => $coverImagePath, // Adicionar o caminho da capa
         ]);
-        return response()->json(['message' => 'Livro criado com sucesso!', 'book' => $book], 201);
 
+        return response()->json(['message' => 'Livro criado com sucesso!', 'book' => $book], 201);
     }
 
     public function index(Request $request) : JsonResponse
@@ -48,9 +59,8 @@ class BookController extends Controller
 
     public function addComment(Request $request, $bookId) : JsonResponse
     {
-
         $request->validate([
-            'comment' => 'required|string|max:1000', // MAXIMO 1000 CARACTERES
+            'comment' => 'required|string|max:1000',
         ]);
 
         $book = Book::findOrFail($bookId);
@@ -62,5 +72,4 @@ class BookController extends Controller
 
         return response()->json(['message' => 'Comentário adicionado com sucesso!']);
     }
-
 }
