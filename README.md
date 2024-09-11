@@ -20,11 +20,13 @@ Gerar a chave no arquivo .env!
 
     php artisan key:generate
 
+Gerar a chave do jwt no .env!
+
+    php artisan jwt:secret
+
 Alterar arquivo .env com as credenciais do banco de dados!
 
-Criar arquivo de rotas API!
 
-    php artisan install:api
 
 
 
