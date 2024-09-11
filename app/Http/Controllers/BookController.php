@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Comment;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\JsonResponse;
@@ -55,6 +56,22 @@ class BookController extends Controller
         }
 
         return response()->file(storage_path('app/public/' . $book->path));
+    }
+
+    public function bookPage($id) : JsonResponse
+    {
+        $book = Book::findOrFail($id);
+
+        if (!$book) {
+            return response()->json(['message' => 'Livro não encontrado.'], 404);
+        }
+
+        $comments = Comment::where('book_id', $id)->get();
+
+        return response()->json([
+            'book' => $book,
+            'comments' => $comments
+        ]);
     }
 
     public function addComment(Request $request, $bookId) : JsonResponse

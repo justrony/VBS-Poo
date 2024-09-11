@@ -6,7 +6,7 @@ use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
-use App\Http\Middleware\checkSpecificUser;
+//use App\Http\Middleware\checkSpecificUser;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,7 +21,8 @@ Route::put('confirm/email/{id}/{token}', [VerificationController::class, 'verify
 Route::put('/profile', [UserProfileController::class, 'updateProfile'])->middleware('api');
 Route::delete('/profile', [UserProfileController::class, 'destroyProfile'])->middleware('api');
 
-Route::post('/books', [BookController::class, 'store'])->middleware(CheckSpecificUser::class);
+Route::post('/books', [BookController::class, 'store']); //->middleware(CheckSpecificUser::class);
+Route::get('/books/{id}', [BookController::class, 'bookPage']);
 Route::get('/books/{id}/pdf', [BookController::class, 'downloadPdf']);
 Route::get('/books', [BookController::class, 'index']);
 Route::post('/books/{id}/comments', [BookController::class, 'addComment'])->middleware('api');
