@@ -26,10 +26,13 @@ class AuthController extends Controller
             );
         }
 
+        $user = auth()->user();
+
         return $this->Response(
             message: 'Logado com sucesso!',
             data: [
                 'token' => $token,
+                'user' => $user
             ],
             status: 200
         );
